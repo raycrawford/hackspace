@@ -30,3 +30,12 @@ module "network" {
   source = "./modules/az-network"
   users = "${var.users}"
 }
+
+module "virtual_machine" {
+  source = "./modules/az-virtual_machine"
+  location = "${var.location}"
+  resource_group_name = "lukas"
+  vm_name_prefix = "lrc-lin-01"
+  subnet_id = "${module.network.subnet1}"
+  storage_account_name = "boys"
+}
