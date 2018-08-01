@@ -18,24 +18,33 @@ module "charlies_bucket" {
   location = "${var.location}"
   owner = "${var.charlie}"
 }
-
 module "lukas_bucket" {
   source = "./modules/az-resource_groups"
   resource_group_name = "lukas"
   location = "${var.location}"
   owner = "${var.lukas}"
 }
-
 module "network" {
   source = "./modules/az-network"
   users = "${var.users}"
 }
-
-module "virtual_machine" {
+module "virtual_machine_lukas" {
   source = "./modules/az-virtual_machine"
   location = "${var.location}"
-  resource_group_name = "lukas"
+  resource_group_name = "${module.lukas_bucket.name}"
   vm_name_prefix = "lrc-lin-01"
   subnet_id = "${module.network.subnet1}"
   storage_account_name = "boys"
+  username = "lukas"
+  password = "${var.lukas_password}"
+}
+module "virtual_machine_charlie" {
+  source = "./modules/az-virtual_machine"
+  location = "${var.location}"
+  resource_group_name =  "${module.charlies_bucket.name}"
+  vm_name_prefix = "cwc-lin-01"
+  subnet_id = "${module.network.subnet1}"
+  storage_account_name = "boys"
+  username = "charlie"
+  password = "${var.charlie_password}"
 }
