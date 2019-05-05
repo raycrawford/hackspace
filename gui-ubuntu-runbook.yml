@@ -1,0 +1,38 @@
+---
+- hosts: localhost
+  sudo: yes
+  tasks:
+  - name: Install xfce4
+    apt:
+      name: xfce4
+      state: latest
+
+  - name: Install xrdp
+    apt:
+      name: xrdp
+      state: latest
+
+
+  - shell: 'cat /etc/passwd | cut -d: -f6 | grep home | grep -v syslog | cut -d/ -f3'
+    changed_when: false # Make task green
+    register: existing_users
+
+  - shell: 'echo xfce4-session > /home/{{ item }}/.xsession'
+    with_items: "{{ existing_users.stdout_lines }}"
+
+  - name: Restart xrdp
+    service:
+      name: xrdp
+      state: restarted
+
+  - name: Install Visual Studio Code
+    apt:
+      deb: https://az764295.vo.msecnd.net/stable/1dfc5e557209371715f655691b1235b6b26a06be/code_1.25.1-1531323788_amd64.deb
+
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
+      update_cache: yes
+      force_apt_get: true
+      

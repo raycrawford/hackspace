@@ -29,7 +29,7 @@ module "network" {
   users = "${var.users}"
 }
 module "virtual_machine_lukas" {
-  source = "./modules/az-virtual_machine"
+  source = "./modules/az-virtual_machine_ubuntu"
   location = "${var.location}"
   resource_group_name = "${module.lukas_bucket.name}"
   vm_name_prefix = "lrc-lin-01"
@@ -39,7 +39,7 @@ module "virtual_machine_lukas" {
   password = "${var.lukas_password}"
 }
 module "virtual_machine_charlie" {
-  source = "./modules/az-virtual_machine"
+  source = "./modules/az-virtual_machine_ubuntu"
   location = "${var.location}"
   resource_group_name =  "${module.charlies_bucket.name}"
   vm_name_prefix = "cwc-lin-01"
